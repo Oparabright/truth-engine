@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import TruthEngine from "@/lib/genlayer/TruthEngine";
 import { connectWallet } from "@/lib/genlayer/client";
@@ -441,14 +442,27 @@ export default function Home() {
     <main className="min-h-screen bg-[#07111f] text-white">
       <section className="mx-auto flex min-h-screen max-w-6xl flex-col px-6 py-10 md:px-10">
         <header className="flex items-center justify-between gap-4">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-cyan-400">
-              GenLayer
-            </p>
+          <div className="flex items-center gap-3">
+            <div className="overflow-hidden rounded-2xl border border-cyan-400/20 bg-[#081421] shadow-lg shadow-cyan-950/20">
+              <Image
+                src="/truth-engine-logo.png"
+                alt="Truth Engine logo"
+                width={58}
+                height={58}
+                priority
+                className="h-[58px] w-[58px] object-cover"
+              />
+            </div>
 
-            <h1 className="mt-1 text-xl font-bold">
-              Truth Engine
-            </h1>
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.28em] text-cyan-400">
+                GenLayer
+              </p>
+
+              <h1 className="mt-1 text-xl font-bold">
+                Truth Engine
+              </h1>
+            </div>
           </div>
 
           <div className="flex items-center gap-3">
@@ -872,6 +886,124 @@ export default function Home() {
             </div>
           </div>
         </div>
+
+        <section className="mb-16 rounded-3xl border border-white/10 bg-white/[0.035] p-6 md:p-8">
+          <div className="max-w-3xl">
+            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-cyan-300/70">
+              From MVP to the verification layer
+            </p>
+
+            <h3 className="mt-3 text-3xl font-bold leading-tight md:text-4xl">
+              Built for today. Designed for a world where agents need evidence-backed answers.
+            </h3>
+
+            <p className="mt-4 text-base leading-7 text-white/50">
+              Truth Engine already delivers an end-to-end consensus workflow today, while the roadmap expands it into a broader verification layer for people, autonomous agents, and applications.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-6 lg:grid-cols-2">
+            <div className="rounded-2xl border border-emerald-300/15 bg-emerald-300/[0.04] p-6">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-300/70">
+                    What works today
+                  </p>
+                  <h4 className="mt-2 text-xl font-semibold">
+                    Working MVP
+                  </h4>
+                </div>
+
+                <span className="rounded-full border border-emerald-300/20 bg-emerald-300/10 px-3 py-1 text-xs font-semibold text-emerald-200">
+                  LIVE
+                </span>
+              </div>
+
+              <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                {[
+                  "Automatic evidence discovery",
+                  "On-chain Truth Cases",
+                  "Independent validator evidence review",
+                  "Exact-claim matching",
+                  "TRUE / FALSE / UNRESOLVED / CONTEXTUAL",
+                  "Graceful evidence failure handling",
+                  "On-chain explanations and summaries",
+                  "Live Truth Receipts",
+                ].map((item) => (
+                  <div
+                    key={item}
+                    className="flex items-start gap-3 rounded-xl border border-white/5 bg-black/10 p-3"
+                  >
+                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-300/10 text-xs text-emerald-300">
+                      ✓
+                    </span>
+
+                    <p className="text-sm leading-6 text-white/65">
+                      {item}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-cyan-300/15 bg-cyan-300/[0.04] p-6">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-300/70">
+                    What comes next
+                  </p>
+                  <h4 className="mt-2 text-xl font-semibold">
+                    Roadmap
+                  </h4>
+                </div>
+
+                <span className="rounded-full border border-cyan-300/20 bg-cyan-300/10 px-3 py-1 text-xs font-semibold text-cyan-200">
+                  NEXT
+                </span>
+              </div>
+
+              <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                {[
+                  "Primary-source prioritization",
+                  "Source trust and reputation scoring",
+                  "Timestamp-aware verification",
+                  "Breaking-news research mode",
+                  "Single-transaction UX",
+                  "Shareable public Truth Receipt pages",
+                  "Case history and search",
+                  "Developer API and agent SDK",
+                  "Machine-readable consensus receipts",
+                  "Webhooks for resolved cases",
+                  "Persistent production deployment",
+                  "Richer contradiction detection",
+                ].map((item) => (
+                  <div
+                    key={item}
+                    className="flex items-start gap-3 rounded-xl border border-white/5 bg-black/10 p-3"
+                  >
+                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-cyan-300/10 text-xs text-cyan-300">
+                      →
+                    </span>
+
+                    <p className="text-sm leading-6 text-white/65">
+                      {item}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-6 rounded-2xl border border-violet-300/10 bg-violet-300/[0.035] p-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-violet-200/60">
+              Long-term vision
+            </p>
+
+            <p className="mt-2 max-w-4xl text-sm leading-7 text-white/55">
+              The goal is not to claim absolute truth. The goal is to provide a reusable verification layer that asks: what conclusion is best supported by the available evidence after independent AI validators examine it?
+            </p>
+          </div>
+        </section>
 
         <footer className="border-t border-white/10 pt-6 text-sm text-white/30">
           Truth Engine · Verifiable answers
