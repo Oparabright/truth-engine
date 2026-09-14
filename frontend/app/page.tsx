@@ -28,6 +28,14 @@ const examples = [
   "Can rice and plantain be eaten together as part of a healthy diet?",
 ];
 
+const progressSteps = [
+  "Discovering evidence",
+  "Creating Truth Case",
+  "Validators examining evidence",
+  "Reaching consensus",
+  "Truth Receipt ready",
+];
+
 const contractAddress =
   process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "";
 
@@ -45,6 +53,7 @@ export default function Home() {
     useState(false);
 
   const [processing, setProcessing] = useState(false);
+  const [processingStep, setProcessingStep] = useState(0);
   const [stage, setStage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -195,6 +204,7 @@ export default function Home() {
 
     try {
       setProcessing(true);
+      setProcessingStep(1);
       setErrorMessage("");
       setEvidence([]);
 
@@ -213,13 +223,14 @@ export default function Home() {
         Discover candidate evidence.
       */
       setStage(
-        "Searching the web for relevant evidence..."
+        "Discovering relevant evidence from the web..."
       );
 
       const discovered =
         await discoverEvidence(cleanQuestion);
 
       setEvidence(discovered);
+      setProcessingStep(2);
 
       const source1 =
         discovered[0]?.url || "";
@@ -235,7 +246,7 @@ export default function Home() {
         Create the on-chain Truth Case.
       */
       setStage(
-        "Creating your Truth Case on GenLayer..."
+        "Creating your on-chain Truth Case. Review the wallet transaction details before approving."
       );
 
       const truthEngine =
@@ -257,7 +268,7 @@ export default function Home() {
         );
 
       setStage(
-        "Waiting for the Truth Case transaction to be accepted..."
+        "Truth Case submitted. Waiting for GenLayer to accept the transaction..."
       );
 
       await truthEngine.waitForAcceptedTransaction(
@@ -287,13 +298,15 @@ export default function Home() {
         transactionHash: createTxHash,
       }));
 
+      setProcessingStep(3);
+
       /*
         STEP 3:
         Ask GenLayer validators to independently
         investigate the evidence and reach consensus.
       */
       setStage(
-        `Case #${caseId} created. Starting Intelligent Consensus...`
+        `Case #${caseId} is ready. GenLayer validators are preparing to examine the evidence independently.`
       );
 
       const resolveTxHash =
@@ -304,6 +317,8 @@ export default function Home() {
         transactionHash:
           resolveTxHash,
       }));
+
+      setProcessingStep(4);
 
       /*
         We deliberately do NOT depend on the
@@ -316,7 +331,7 @@ export default function Home() {
         until the case reaches RESOLVED.
       */
       setStage(
-        "GenLayer validators are investigating the evidence and reaching consensus..."
+        "Reaching consensus. Validators are independently inspecting the evidence, so this step can take a little while."
       );
 
       await truthEngine.waitForCaseResolved(
@@ -328,8 +343,9 @@ export default function Home() {
         Read the finalized result directly
         from the contract.
       */
+      setProcessingStep(5);
       setStage(
-        "Consensus reached. Building your Truth Receipt..."
+        "Consensus reached. Building your finalized Truth Receipt..."
       );
 
       const [
@@ -389,6 +405,7 @@ export default function Home() {
         );
       } else {
         setStage("");
+        setProcessingStep(0);
       }
     } finally {
       setProcessing(false);
@@ -589,14 +606,75 @@ export default function Home() {
                       <div className="mt-1 h-5 w-5 shrink-0 animate-spin rounded-full border-2 border-cyan-300/30 border-t-cyan-300" />
                     )}
 
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-300/70">
-                        Truth Engine
+                        Truth Engine is working
                       </p>
 
-                      <p className="mt-2 text-sm leading-6 text-white/70">
+                      <p className="mt-2 text-sm leading-6 text-white/75">
                         {stage}
                       </p>
+
+                      <div className="mt-5 grid gap-2 sm:grid-cols-5">
+                        {progressSteps.map((label, index) => {
+                          const stepNumber = index + 1;
+                          const isComplete =
+                            processingStep > stepNumber;
+                          const isCurrent =
+                            processingStep === stepNumber;
+
+                          return (
+                            <div
+                              key={label}
+                              className={`rounded-xl border px-3 py-3 ${
+                                isCurrent
+                                  ? "border-cyan-300/40 bg-cyan-300/10"
+                                  : isComplete
+                                    ? "border-emerald-300/20 bg-emerald-300/[0.06]"
+                                    : "border-white/10 bg-black/10"
+                              }`}
+                            >
+                              <div className="flex items-center gap-2">
+                                <span
+                                  className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
+                                    isCurrent
+                                      ? "bg-cyan-300 text-[#06101b]"
+                                      : isComplete
+                                        ? "bg-emerald-300/15 text-emerald-300"
+                                        : "bg-white/5 text-white/30"
+                                  }`}
+                                >
+                                  {isComplete ? "✓" : stepNumber}
+                                </span>
+
+                                <span
+                                  className={`text-xs leading-5 ${
+                                    isCurrent
+                                      ? "font-semibold text-cyan-100"
+                                      : isComplete
+                                        ? "text-white/55"
+                                        : "text-white/30"
+                                  }`}
+                                >
+                                  {label}
+                                </span>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {processingStep >= 3 && processingStep <= 4 && (
+                        <p className="mt-4 text-xs leading-5 text-white/40">
+                          Intelligent Consensus can take longer than a normal AI response because GenLayer validators independently examine the evidence before the case is finalized.
+                        </p>
+                      )}
+
+                      {processingStep === 2 && (
+                        <p className="mt-4 text-xs leading-5 text-white/40">
+                          The current MVP uses wallet approvals for on-chain actions. Always review the transaction details shown by your wallet before approving.
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>
