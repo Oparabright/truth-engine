@@ -629,7 +629,7 @@ export default function Home() {
                         {stage}
                       </p>
 
-                      <div className="mt-5 grid gap-2 sm:grid-cols-5">
+                      <div className="mt-5 grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
                         {progressSteps.map((label, index) => {
                           const stepNumber = index + 1;
                           const isComplete =
@@ -640,7 +640,7 @@ export default function Home() {
                           return (
                             <div
                               key={label}
-                              className={`rounded-xl border px-3 py-3 ${
+                              className={`min-h-[88px] rounded-xl border px-3 py-3 ${
                                 isCurrent
                                   ? "border-cyan-300/40 bg-cyan-300/10"
                                   : isComplete
@@ -648,9 +648,9 @@ export default function Home() {
                                     : "border-white/10 bg-black/10"
                               }`}
                             >
-                              <div className="flex items-center gap-2">
+                              <div className="flex h-full flex-col items-center justify-center gap-2 text-center">
                                 <span
-                                  className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
+                                  className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
                                     isCurrent
                                       ? "bg-cyan-300 text-[#06101b]"
                                       : isComplete
@@ -662,7 +662,7 @@ export default function Home() {
                                 </span>
 
                                 <span
-                                  className={`text-xs leading-5 ${
+                                  className={`text-[11px] leading-4 ${
                                     isCurrent
                                       ? "font-semibold text-cyan-100"
                                       : isComplete
